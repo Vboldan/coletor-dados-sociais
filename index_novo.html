@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Morena Dados - Coleta Social</title>
+    <style>
+        :root {
+            --primary-dark: #1e293b;
+            --primary-blue: #2563eb;
+            --blue-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; }
+        .header { background-color: var(--primary-dark); color: white; padding: 25px 0; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 30px; }
+        .header h1 { margin: 0; font-size: 1.8em; font-weight: 600; }
+        .header p { margin: 5px 0 0 0; color: #cbd5e1; font-size: 0.95em; }
+        .container { max-width: 700px; margin: 0 auto; padding: 0 20px 40px 20px; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid var(--border-color); margin-bottom: 25px; }
+        .section-title { margin-top: 0; margin-bottom: 20px; font-size: 1.2em; color: var(--primary-dark); border-bottom: 2px solid var(--bg-color); padding-bottom: 10px; }
+        
+        /* Ajuste do Grid para telas de notebook */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
+        label { font-weight: 600; margin-bottom: 6px; font-size: 0.85em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select { padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.95em; background-color: var(--bg-color); color: var(--text-main); width: 100%; box-sizing: border-box; }
+        input:focus, select:focus { outline: none; border-color: var(--primary-blue); background-color: #ffffff; }
+        input[readonly], select[disabled] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
+        button { width: 100%; background-color: var(--primary-blue); color: white; border: none; cursor: pointer; font-weight: bold; padding: 15px; font-size: 1.1em; border-radius: 8px; transition: all 0.3s; margin-top: 10px; }
+        button:hover { background-color: var(--blue-hover); }
+        #mensagemStatus { display: none; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .copyright-notice { text-align: center; font-size: 0.8em; color: var(--text-muted); margin-top: 20px; }
+
+        /* ==============================================
+           REGRAS EXCLUSIVAS PARA SMARTPHONES (Telas < 600px)
+           ============================================== */
+        @media (max-width: 600px) {
+            .container { padding: 0 10px 20px 10px; } /* Menos espaço nas laterais fora do cartão */
+            .card { padding: 20px; } /* Menos espaço interno dentro do cartão */
+            .form-grid { grid-template-columns: 1fr; gap: 0px; } /* Força uma única coluna para tudo empilhar perfeitamente */
+            .header { padding: 20px 10px; }
+            .header h1 { font-size: 1.5em; }
+            input, select { padding: 10px; font-size: 0.9em; } /* Campos ligeiramente menores para caber melhor na tela */
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>MORENA DADOS</h1>
+    <p>Agente Coletor de Informações Cidadãs</p>
+</div>
+
+<div class="container">
+    <div id="mensagemStatus"></div>
+
+    <form id="formColeta">
+        <div class="card">
+            <h2 class="section-title">Dados Demográficos</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" placeholder="Ex: 79000-000" maxlength="9" required onblur="buscarCEP()">
+                </div>
+
+                <div class="form-group">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro" placeholder="Preenchimento automático" readonly required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="genero">Gênero</label>
+                    <select id="genero" name="genero" required>
+                        <option value="">Selecione...</option>
+                        <option value="Homem Cisgênero">Homem Cisgênero (Identifica-se com o sexo biológico masculino)</option>
+                        <option value="Mulher Cisgênero">Mulher Cisgênero (Identifica-se com o sexo biológico feminino)</option>
+                        <option value="Homem Transgênero">Homem Transgênero</option>
+                        <option value="Mulher Transgênero">Mulher Transgênero</option>
+                        <option value="Não-binário">Não-binário (Não se identifica estritamente como homem ou mulher)</option>
+                        <option value="Gênero fluido / Outro">Gênero fluido / Outra identidade</option>
+                        <option value="Não informado">Prefiro não responder</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="etnia">Etnia / Cor ou Raça</label>
+                    <select id="etnia" name="etnia" required>
+                        <option value="">Selecione...</option>
+                        <option value="Branca">Branca</option>
+                        <option value="Preta">Preta</option>
+                        <option value="Parda">Parda</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Indígena">Indígena</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="idade">Idade</label>
+                    <input type="number" id="idade" name="idade" min="0" max="120" placeholder="Ex: 28" required oninput="validarRegrasIdade()">
+                </div>
+
+                <div class="form-group">
+                    <label for="profissao">Profissão</label>
+                    <input type="text" id="profissao" name="profissao" placeholder="Ex: Estudante, Autônomo..." required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="escolaridade">Escolaridade</label>
+                <select id="escolaridade" name="escolaridade" required>
+                    <option value="">Selecione...</option>
+                    <option value="Sem instrução / Fundamental Incompleto">Sem instrução / Fund. Incompleto</option>
+                    <option value="Fundamental Completo / Médio Incompleto">Fund. Completo / Médio Incompleto</option>
+                    <option value="Médio Completo / Superior Incompleto">Médio Completo / Sup. Incompleto</option>
+                    <option value="Superior Completo">Superior Completo</option>
+                    <option value="Pós-Graduação / Especialização">Pós-Graduação / Especialização</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Avaliação dos Serviços Públicos</h2>
+
+            <div class="form-group">
+                <label for="transporte">Transporte Público</label>
+                <select id="transporte" name="transporte" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="asfalto">Asfalto / Pavimentação</label>
+                <select id="asfalto" name="asfalto" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="saude">Posto de Saúde / UBS</label>
+                <select id="saude" name="saude" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <button type="submit" id="btnSalvar">Salvar Informações</button>
+        </div>
+    </form>
+
+    <div class="copyright-notice">
+        © 2026 Valdeci. Todos os direitos reservados. Projeto registrado sob propriedade intelectual.
+    </div>
+</div>
+
+<script>
+    function validarRegrasIdade() {
+        const campoIdade = document.getElementById('idade');
+        const campoProfissao = document.getElementById('profissao');
+        const campoEscolaridade = document.getElementById('escolaridade');
+
+        if (campoIdade.value === "") return;
+
+        const idade = parseInt(campoIdade.value);
+
+        if (idade < 4) {
+            campoEscolaridade.required = false;
+            campoEscolaridade.disabled = true;
+            campoEscolaridade.value = "";
+        } else {
+            campoEscolaridade.required = true;
+            campoEscolaridade.disabled = false;
+        }
+
+        if (idade < 14) {
+            campoProfissao.required = false;
+            campoProfissao.disabled = true;
+            campoProfissao.value = "Não se aplica (Menor de 14 anos)";
+        } else {
+            campoProfissao.required = true;
+            campoProfissao.disabled = false;
+            if (campoProfissao.value.includes("Não se aplica")) {
+                campoProfissao.value = "";
+            }
+        }
+    }
+
+    // CORREÇÃO: Busca o Bairro na API gratuita do ViaCEP
+    async function buscarCEP() {
+        const inputCEP = document.getElementById('cep');
+        const inputBairro = document.getElementById('bairro');
+        const cepLimpo = inputCEP.value.replace(/\D/g, '');
+
+        if (cepLimpo.length === 8) {
+            inputBairro.value = "Buscando...";
+            try {
+                const resposta = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+                const dados = await resposta.json();
+                if (!dados.erro) {
+                    inputBairro.value = dados.bairro || "Bairro não especificado";
+                } else {
+                    inputBairro.value = "";
+                    alert("CEP não encontrado.");
+                }
+            } catch (e) {
+                inputBairro.value = "";
+                alert("Erro ao buscar o CEP.");
+            }
+        }
+    }
+
+    // CORREÇÃO: Envia os dados para a sua API no ngrok
+    document.getElementById('formColeta').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnSalvar');
+        const status = document.getElementById('mensagemStatus');
+        btn.innerText = "Gravando no banco...";
+        btn.disabled = true;
+
+        document.getElementById('escolaridade').disabled = false;
+        document.getElementById('profissao').disabled = false;
+
+        const formData = new FormData(e.target);
+
+        try {
+            const resposta = await fetch('https://hamulous-lavona-bilgier.ngrok-free.dev/salvar', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (resposta.ok) {
+                status.innerText = "✅ Informações salvas com sucesso!";
+                status.style.display = 'block';
+                document.getElementById('formColeta').reset();
+                validarRegrasIdade();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                alert("Ocorreu um erro no servidor ao salvar.");
+            }
+        } catch (erro) {
+            alert("Erro na conexão com a API.");
+        } finally {
+            btn.innerText = "Salvar Informações";
+            btn.disabled = false;
+        }
+    };
+</script>
+
+</body>
+</html>
+# testando 

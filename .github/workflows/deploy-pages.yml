@@ -1,0 +1,26 @@
+name: Deploy static content to Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload Pages artifact
+<<<<<<< HEAD
+        uses: actions/upload-pages-artifact@v1
+=======
+        uses: actions/upload-pages-artifact@v3
+>>>>>>> 0d661fbf097890d50d325aed1f066b75e2383a22
+        with:
+          path: './'

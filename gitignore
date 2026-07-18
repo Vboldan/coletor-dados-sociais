@@ -1,0 +1,3 @@
+env_ibge/
+__pycache__/
+*.pyc
