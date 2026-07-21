@@ -20,11 +20,10 @@
         padding: 0;
     }
 
-    /* O cabeçalho abriga a foto de fundo exata */
     .header {
         position: relative;
         background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)),
-                    url('parque.jpg') center/cover no-repeat; /* No VS Code, deixe o nome do arquivo da foto ou o link */
+                    url('parque.jpg') center/cover no-repeat;
         padding: 60px 20px;
         text-align: center;
         margin-bottom: 30px;
@@ -137,6 +136,8 @@
 
     button:hover { filter: brightness(0.9); }
 
+    #mensagemStatus { display: none; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
     .copyright-notice {
         text-align: center;
         font-size: 0.8em;
@@ -162,7 +163,115 @@
     <div id="mensagemStatus"></div>
 
     <form id="formColeta">
-        <!-- (Seu formulário continua exatamente igual aqui dentro) -->
+        <div class="card">
+            <h2 class="section-title">Dados Demográficos</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" placeholder="Ex: 79000-000" maxlength="9" required onblur="buscarCEP()">
+                </div>
+
+                <div class="form-group">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro" placeholder="Preenchimento automático" readonly required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="genero">Gênero</label>
+                    <select id="genero" name="genero" required>
+                        <option value="">Selecione...</option>
+                        <option value="Masculino Cisgênero">Masculino Cisgênero</option>
+                        <option value="Feminino Cisgênero">Feminino Cisgênero</option>
+                        <option value="Masculino Transgênero">Masculino Transgênero</option>
+                        <option value="Feminino Transgênero">Feminino Transgênero</option>
+                        <option value="Não-binário">Não-binário</option>
+                        <option value="Gênero fluido / Outro">Gênero fluido / Outro</option>
+                        <option value="Não informado">Prefiro não responder</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="etnia">Etnia / Cor ou Raça</label>
+                    <select id="etnia" name="etnia" required>
+                        <option value="">Selecione...</option>
+                        <option value="Branca">Branca</option>
+                        <option value="Preta">Preta</option>
+                        <option value="Parda">Parda</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Indígena">Indígena</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="idade">Idade</label>
+                    <input type="number" id="idade" name="idade" min="0" max="120" placeholder="Ex: 28" required oninput="validarRegrasIdade()">
+                </div>
+
+                <div class="form-group">
+                    <label for="profissao">Profissão</label>
+                    <input type="text" id="profissao" name="profissao" placeholder="Ex: Estudante, Autônomo..." required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="escolaridade">Escolaridade</label>
+                <select id="escolaridade" name="escolaridade" required>
+                    <option value="">Selecione...</option>
+                    <option value="Sem instrução / Fundamental Incompleto">Sem instrução / Fund. Incompleto</option>
+                    <option value="Fundamental Completo / Médio Incompleto">Fund. Completo / Médio Incompleto</option>
+                    <option value="Médio Completo / Superior Incompleto">Médio Completo / Sup. Incompleto</option>
+                    <option value="Superior Completo">Superior Completo</option>
+                    <option value="Pós-Graduação / Especialização">Pós-Graduação / Especialização</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Avaliação dos Serviços Públicos</h2>
+
+            <div class="form-group">
+                <label for="transporte">Transporte Público</label>
+                <select id="transporte" name="transporte" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="asfalto">Asfalto / Pavimentação</label>
+                <select id="asfalto" name="asfalto" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="saude">Posto de Saúde / UBS</label>
+                <select id="saude" name="saude" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <button type="submit" id="btnSalvar">Salvar Informações</button>
+        </div>
     </form>
 
     <div class="copyright-notice">
@@ -170,12 +279,6 @@
     </div>
 </div>
 
-<script>
-    // Suas funções JS (validarRegrasIdade, buscarCEP, onsubmit) continuam aqui perfeitamente funcionais.
-</script>
-
-</body>
-</html>
 <script>
     function validarRegrasIdade() {
         const campoIdade = document.getElementById('idade');
@@ -208,7 +311,6 @@
         }
     }
 
-    // CORREÇÃO: Busca o Bairro na API gratuita do ViaCEP
     async function buscarCEP() {
         const inputCEP = document.getElementById('cep');
         const inputBairro = document.getElementById('bairro');
@@ -232,7 +334,6 @@
         }
     }
 
-    // CORREÇÃO: Envia os dados para a sua API no ngrok
     document.getElementById('formColeta').onsubmit = async (e) => {
         e.preventDefault();
         
@@ -272,4 +373,3 @@
 
 </body>
 </html>
-
