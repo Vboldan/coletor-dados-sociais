@@ -1,0 +1,6 @@
+{
+    "github-actions.use-enterprise": true,
+    "github-actions.workflows.pinned.refresh.enabled": true,
+    "github-actions.workflows.pinned.refresh.interval": 1,
+    "python-envs.defaultEnvManager": "ms-python.python:venv"
+}

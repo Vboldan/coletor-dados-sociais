@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Morena Dados - Coleta Social</title>
+    <style>
+        :root {
+            --primary-dark: #1e293b;
+            --primary-blue: #2563eb;
+            --accent-avocado: #84cc16;
+            --bg-color: #0f172a;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            position: relative;
+            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)),
+                        url('parque.jpg') center/cover no-repeat;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            background-color: var(--accent-avocado);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: #0f172a;
+            box-shadow: 0 0 15px rgba(132, 204, 22, 0.5);
+            transform: rotate(-5deg);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            color: #cbd5e1;
+            font-size: 0.95em;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px 40px 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            color: #1e293b;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #1e293b;
+            border-left: 5px solid var(--accent-avocado);
+            padding-left: 10px;
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 15px; }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.85em;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95em;
+            background-color: #f8fafc;
+            color: #334155;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus { outline: none; border-color: var(--accent-avocado); background-color: #ffffff; }
+
+        input[readonly] { color: #1e293b !important; font-weight: 600; background-color: #f1f5f9; cursor: default; }
+
+        button {
+            width: 100%;
+            background-color: var(--accent-avocado);
+            color: #0f172a;
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+            padding: 15px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover { filter: brightness(0.9); }
+
+        #mensagemStatus { display: none; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px; background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
+        .copyright-notice {
+            text-align: center;
+            font-size: 0.8em;
+            color: #94a3b8;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; gap: 0px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-container">
+        <div class="logo-circle">M+D</div>
+        <h1>MORENA DADOS</h1>
+        <p>Agente Coletor de Informações Cidadãs</p>
+    </div>
+</div>
+
+<div class="container">
+    <div id="mensagemStatus"></div>
+
+    <form id="formColeta">
+        <div class="card">
+            <h2 class="section-title">Dados Demográficos</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" placeholder="Ex: 79000-000" maxlength="9" required onblur="buscarCEP()">
+                </div>
+
+                <div class="form-group">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" name="bairro" placeholder="Preenchimento automático" readonly required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="genero">Gênero</label>
+                    <select id="genero" name="genero" required>
+                        <option value="">Selecione...</option>
+                        <option value="Masculino Cisgênero">Masculino Cisgênero</option>
+                        <option value="Feminino Cisgênero">Feminino Cisgênero</option>
+                        <option value="Masculino Transgênero">Masculino Transgênero</option>
+                        <option value="Feminino Transgênero">Feminino Transgênero</option>
+                        <option value="Não-binário">Não-binário</option>
+                        <option value="Gênero fluido / Outro">Gênero fluido / Outro</option>
+                        <option value="Não informado">Prefiro não responder</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="etnia">Etnia / Cor ou Raça</label>
+                    <select id="etnia" name="etnia" required>
+                        <option value="">Selecione...</option>
+                        <option value="Branca">Branca</option>
+                        <option value="Preta">Preta</option>
+                        <option value="Parda">Parda</option>
+                        <option value="Amarela">Amarela</option>
+                        <option value="Indígena">Indígena</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="idade">Idade</label>
+                    <input type="number" id="idade" name="idade" min="0" max="120" placeholder="Ex: 28" required oninput="validarRegrasIdade()">
+                </div>
+
+                <div class="form-group">
+                    <label for="profissao">Profissão</label>
+                    <input type="text" id="profissao" name="profissao" placeholder="Ex: Estudante, Autônomo..." required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="escolaridade">Escolaridade</label>
+                <select id="escolaridade" name="escolaridade" required>
+                    <option value="">Selecione...</option>
+                    <option value="Sem instrução / Fundamental Incompleto">Sem instrução / Fund. Incompleto</option>
+                    <option value="Fundamental Completo / Médio Incompleto">Fund. Completo / Médio Incompleto</option>
+                    <option value="Médio Completo / Superior Incompleto">Médio Completo / Sup. Incompleto</option>
+                    <option value="Superior Completo">Superior Completo</option>
+                    <option value="Pós-Graduação / Especialização">Pós-Graduação / Especialização</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Avaliação dos Serviços Públicos</h2>
+
+            <div class="form-group">
+                <label for="transporte">Transporte Público</label>
+                <select id="transporte" name="transporte" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="asfalto">Asfalto / Pavimentação</label>
+                <select id="asfalto" name="asfalto" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="saude">Posto de Saúde / UBS</label>
+                <select id="saude" name="saude" required>
+                    <option value="">Avalie a qualidade...</option>
+                    <option value="Péssimo">Péssimo</option>
+                    <option value="Ruim">Ruim</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Bom">Bom</option>
+                    <option value="Ótimo">Ótimo</option>
+                </select>
+            </div>
+
+            <button type="submit" id="btnSalvar">Salvar Informações</button>
+        </div>
+    </form>
+
+    <div class="copyright-notice">
+        © 2026 Valdeci Boldan. Todos os direitos reservados. Projeto registrado sob propriedade intelectual.
+    </div>
+</div>
+
+<script>
+    function validarRegrasIdade() {
+        const campoIdade = document.getElementById('idade');
+        const campoProfissao = document.getElementById('profissao');
+        const campoEscolaridade = document.getElementById('escolaridade');
+
+        if (campoIdade.value === "") return;
+
+        const idade = parseInt(campoIdade.value);
+
+        if (idade < 4) {
+            campoEscolaridade.required = false;
+            campoEscolaridade.disabled = true;
+            campoEscolaridade.value = "";
+        } else {
+            campoEscolaridade.required = true;
+            campoEscolaridade.disabled = false;
+        }
+
+        if (idade < 14) {
+            campoProfissao.required = false;
+            campoProfissao.disabled = true;
+            campoProfissao.value = "Não se aplica (Menor de 14 anos)";
+        } else {
+            campoProfissao.required = true;
+            campoProfissao.disabled = false;
+            if (campoProfissao.value.includes("Não se aplica")) {
+                campoProfissao.value = "";
+            }
+        }
+    }
+
+    async function buscarCEP() {
+        const inputCEP = document.getElementById('cep');
+        const inputBairro = document.getElementById('bairro');
+        const cepLimpo = inputCEP.value.replace(/\D/g, '');
+
+        if (cepLimpo.length === 8) {
+            inputBairro.value = "Buscando...";
+            try {
+                const resposta = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+                const dados = await resposta.json();
+                if (!dados.erro) {
+                    inputBairro.value = dados.bairro || "Bairro não especificado";
+                } else {
+                    inputBairro.value = "";
+                    alert("CEP não encontrado.");
+                }
+            } catch (e) {
+                inputBairro.value = "";
+                alert("Erro ao buscar o CEP.");
+            }
+        }
+    }
+
+// CORREÇÃO 1: Envia os dados para a NOVA API no ngrok (Endereço novo!)
+    document.getElementById('formColeta').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnSalvar');
+        const status = document.getElementById('mensagemStatus');
+        btn.innerText = "Gravando no banco...";
+        btn.disabled = true;
+
+        document.getElementById('escolaridade').disabled = false;
+        document.getElementById('profissao').disabled = false;
+
+        const formData = new FormData(e.target);
+
+        // CORREÇÃO: URL DO FETCH ATUALIZADA COM O ENDEREÇO NOVO DO NGROK
+        try {
+            const resposta = await fetch('https://coletor-dados-sociais.onrender.com/salvar', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (resposta.ok) {
+                status.innerText = "✅ Informações salvas com sucesso!";
+                status.style.display = 'block';
+                document.getElementById('formColeta').reset();
+                validarRegrasIdade();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                alert("Ocorreu um erro no servidor ao salvar.");
+            }
+        } 
+        // CORREÇÃO 2: Adicionado o bloco 'catch' para tratar erros, como o VS Code indicou
+        catch (erro) {
+            console.error("Erro na requisição:", erro);
+            alert("Erro na conexão com a API. Verifique se o servidor está rodando.");
+        } 
+        // CORREÇÃO 3: Adicionado o bloco 'finally' para garantir que o botão seja reativado
+        finally {
+            btn.innerText = "Salvar Informações";
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
