@@ -1,8 +1,8 @@
-name: Deploy static content to Pages
+name: Implantar conteúdo estático em Páginas
 
 on:
   push:
-    branches: [ main ]
+    branches: [ principal ]
   workflow_dispatch:
 
 permissions:
@@ -10,17 +10,13 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  implantar:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Repositório de checkout
         uses: actions/checkout@v4
 
-      - name: Upload Pages artifact
-<<<<<<< HEAD
-        uses: actions/upload-pages-artifact@v1
-=======
+      - name: Artefato de Upload de Páginas
         uses: actions/upload-pages-artifact@v3
->>>>>>> 0d661fbf097890d50d325aed1f066b75e2383a22
         with:
           path: './'
