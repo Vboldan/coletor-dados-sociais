@@ -47,10 +47,10 @@ async def salvar_dados(
             "Gênero": genero,
             "Raça": etnia,
             "Idade": str(idade),
-            "Escoridade": escolaridade,
-            "Avaliação_Pos": transporte,
-            "Avaliação_Pav": asfalto,
-            "Avaliação_Trar": saude
+            "Escolaridade": escolaridade,
+            "Avaliação_Transporte": transporte,
+            "Avaliação_Pavimentação": asfalto,
+            "Avaliação_Posto_Saúde": saude
         }
 
         response = supabase.table("Respostas").insert(dados).execute()
@@ -63,5 +63,3 @@ async def salvar_dados(
 if __name__ == "__main__":
     print("Iniciando o servidor do Coletor de Dados...")
     uvicorn.run(app, host="0.0.0.0", port=8000)
-    
-    
