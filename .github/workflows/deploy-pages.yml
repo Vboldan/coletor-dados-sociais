@@ -1,0 +1,22 @@
+name: Implantar conteúdo estático em Páginas
+
+on:
+  push:
+    branches: [ principal ]
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+jobs:
+  implantar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repositório de checkout
+        uses: actions/checkout@v4
+
+      - name: Artefato de Upload de Páginas
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './'
